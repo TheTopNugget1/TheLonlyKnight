@@ -89,6 +89,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""6719b8eb-e77d-4b8b-a552-d923bd2037f9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -105,8 +114,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""156e101b-d1eb-4a00-b572-edc44f605d15"",
-                    ""path"": ""<DualShockGamepad>/buttonEast"",
+                    ""id"": ""98a21cf7-bfa8-43bb-bb65-b2d4d1a335d0"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -133,17 +142,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Rotate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""22844532-3810-4dd9-846d-673041d5ef90"",
-                    ""path"": ""<DualShockGamepad>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Def"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -179,6 +177,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""HeavyATK"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d023bb66-c88f-4297-bd0d-88cc9b053696"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -194,6 +203,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Gameplay_Dodge = m_Gameplay.FindAction("Dodge", throwIfNotFound: true);
         m_Gameplay_LightATK = m_Gameplay.FindAction("LightATK", throwIfNotFound: true);
         m_Gameplay_HeavyATK = m_Gameplay.FindAction("HeavyATK", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -262,6 +272,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Dodge;
     private readonly InputAction m_Gameplay_LightATK;
     private readonly InputAction m_Gameplay_HeavyATK;
+    private readonly InputAction m_Gameplay_Pause;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -273,6 +284,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Dodge => m_Wrapper.m_Gameplay_Dodge;
         public InputAction @LightATK => m_Wrapper.m_Gameplay_LightATK;
         public InputAction @HeavyATK => m_Wrapper.m_Gameplay_HeavyATK;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -303,6 +315,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @HeavyATK.started += instance.OnHeavyATK;
             @HeavyATK.performed += instance.OnHeavyATK;
             @HeavyATK.canceled += instance.OnHeavyATK;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -328,6 +343,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @HeavyATK.started -= instance.OnHeavyATK;
             @HeavyATK.performed -= instance.OnHeavyATK;
             @HeavyATK.canceled -= instance.OnHeavyATK;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -354,5 +372,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDodge(InputAction.CallbackContext context);
         void OnLightATK(InputAction.CallbackContext context);
         void OnHeavyATK(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

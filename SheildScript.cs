@@ -13,20 +13,30 @@ public class SheildScript : MonoBehaviour
 
     public GameObject pointer;
 
-    Vector2 RegSize = new Vector2(1.5F, 1.5F); //default size of the sheild
+    public CollisionScript Collision;
+    
+    public Vector2 RegSize = new Vector2(1.5f, 1.5f);
 
     bool On = false; // initialised to off
 
-    void TriangleRead(string message)  // receives the message to turn on and off
+    private Collider2D shieldCollider; // Reference to the collider component
+
+    void Start()
+    {
+        // Get the Collider2D component attached to the shield GameObject
+        shieldCollider = GetComponent<Collider2D>();
+    }
+
+    void DefRead(string message)  // receives the message to turn on and off
     {
 
-        if (message == "TriActive")  // toggles on to true
+        if (message == "DefActive")  // toggles on to true
         {
             Debug.Log("recieved message: " + message);
             On = true;
         }
 
-        else if (message == "TriDeactive")  // toggles on to false
+        else if (message == "DefDeactive")  // toggles on to false
         {
             Debug.Log("recieved message: " + message);
             On = false;
@@ -43,16 +53,26 @@ public class SheildScript : MonoBehaviour
         if(On)  // makes the sheild viable
         {
             transform.localScale = RegSize;
+
+            // Enable the collider when the shield is activated
+            shieldCollider.enabled = true;
+            
         }
 
         else if(On == false) // makes the shield disapear
         {
             transform.localScale = Vector2.zero;
+
+            // Disable the collider when the shield is deactivated
+            shieldCollider.enabled = false;
         }
 
         if(transform.position == player.transform.position)  // if the sheild is not being used no rotation input, then the sheild disapears
         {
             transform.localScale = Vector2.zero;
+            
+            // Disable the collider when the shield is deactivated
+            shieldCollider.enabled = false;
         }
 
         else if(On == true)    // if the sheild is not at the player position ie it is being used, it will apear again 
